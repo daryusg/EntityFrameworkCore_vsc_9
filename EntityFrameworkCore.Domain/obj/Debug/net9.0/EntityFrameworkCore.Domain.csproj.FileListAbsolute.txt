@@ -1,0 +1,11 @@
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.AssemblyInfoInputs.cache
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.AssemblyInfo.cs
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.csproj.CoreCompileInputs.cache
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\bin\Debug\net9.0\EntityFrameworkCore.Domain.deps.json
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\bin\Debug\net9.0\EntityFrameworkCore.Domain.dll
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\bin\Debug\net9.0\EntityFrameworkCore.Domain.pdb
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.dll
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\refint\EntityFrameworkCore.Domain.dll
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.pdb
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\ref\EntityFrameworkCore.Domain.dll
