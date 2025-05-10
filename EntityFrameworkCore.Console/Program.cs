@@ -32,11 +32,11 @@ var minTeamsId = await context.Teams.MinAsync(q => q.Id);
 Console.WriteLine($"Min team id: {minTeamsId}");
 
 //avarage
-var avgTeamsId =context.Teams.AverageAsync(q => q.Id);
+var avgTeamsId = await context.Teams.AverageAsync(q => q.Id);
 Console.WriteLine($"Average team id: {avgTeamsId}");
 
 //sum
-var sumTeamsId = context.Teams.SumAsync(q => q.Id);
+var sumTeamsId = await context.Teams.SumAsync(q => q.Id);
 Console.WriteLine($"Sum team id: {sumTeamsId}");
 
 async Task GetAllTeamsQuerySyntax() //cip...36
