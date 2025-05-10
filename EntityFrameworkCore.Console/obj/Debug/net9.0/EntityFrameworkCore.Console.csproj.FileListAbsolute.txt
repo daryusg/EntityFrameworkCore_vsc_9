@@ -174,3 +174,4 @@ C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Conso
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.pdb
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.genruntimeconfig.cache
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\ref\EntityFrameworkCore.Console.dll
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.sourcelink.json

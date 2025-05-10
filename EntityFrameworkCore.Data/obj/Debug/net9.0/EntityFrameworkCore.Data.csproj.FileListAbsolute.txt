@@ -13,3 +13,4 @@ C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Data\
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Data\obj\Debug\net9.0\refint\EntityFrameworkCore.Data.dll
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Data\obj\Debug\net9.0\EntityFrameworkCore.Data.pdb
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Data\obj\Debug\net9.0\ref\EntityFrameworkCore.Data.dll
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Data\obj\Debug\net9.0\EntityFrameworkCore.Data.sourcelink.json

@@ -9,3 +9,4 @@ C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domai
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\refint\EntityFrameworkCore.Domain.dll
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.pdb
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\ref\EntityFrameworkCore.Domain.dll
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Domain\obj\Debug\net9.0\EntityFrameworkCore.Domain.sourcelink.json
