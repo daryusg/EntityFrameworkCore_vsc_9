@@ -5,17 +5,62 @@ using Microsoft.EntityFrameworkCore;
 using var context = new FootballLeagueDbContext();
 
 //select all teams cip...31
-GetAllTeams();
+//GetAllTeams();
+//await GetAllTeamsQuerySyntax(); //cip...36
 
-//select one teams cip...34
-GetOneTeam();
+//select one team cip...34
+//GetOneTeam();
 
-await GetFilteredTeams(); //cip...34
+//select all records that meet a condition
+//await GetFilteredTeams(); //cip...34
+
+//aggregate methods //cip...37
+//count
+var numOfTeams = await context.Teams.CountAsync();
+Console.WriteLine($"Number of teams: {numOfTeams}");
+var numOfTeamsWithCondition1 = await context.Teams.CountAsync(q => q.Id == 1);
+Console.WriteLine($"Number of teams with condition #1: {numOfTeamsWithCondition1}");
+var numOfTeamsWithCondition2 = await context.Teams.CountAsync(q => EF.Functions.Like(q.Name, $"%i%"));
+Console.WriteLine($"Number of teams with condition #2: {numOfTeamsWithCondition2}");
+
+//max
+var maxTeamsId = await context.Teams.MaxAsync(q => q.Id);
+Console.WriteLine($"Max team id: {maxTeamsId}");
+
+//min
+var minTeamsId = await context.Teams.MinAsync(q => q.Id);
+Console.WriteLine($"Min team id: {minTeamsId}");
+
+//avarage
+var avgTeamsId =context.Teams.AverageAsync(q => q.Id);
+Console.WriteLine($"Average team id: {avgTeamsId}");
+
+//sum
+var sumTeamsId = context.Teams.SumAsync(q => q.Id);
+Console.WriteLine($"Sum team id: {sumTeamsId}");
+
+async Task GetAllTeamsQuerySyntax() //cip...36
+{
+    Console.Write("Enter search term: ");
+    //var desiredTeam = Console.ReadLine(); // Read the input from the user //cip...34
+    var searchTerm = Console.ReadLine(); // Read the input from the user //cip...35
+    //SELECT * FROM Teams
+    var teams = await(
+        from t
+        in context.Teams
+        where EF.Functions.Like(t.Name, $"%{searchTerm}%")
+        select t
+    ).ToListAsync();
+    foreach (var team in teams)
+    {
+        Console.WriteLine($"GetAllTeamsQuerySyntax.team: {team.Name}, Created Date: {team.CreatedDate}");
+    }
+}
 
 async Task GetFilteredTeams() //cip...34
 {
     // Prompt the user for input
-    Console.WriteLine("Enter search term: ");
+    Console.Write("Enter search term: ");
     //var desiredTeam = Console.ReadLine(); // Read the input from the user //cip...34
     var searchTerm = Console.ReadLine(); // Read the input from the user //cip...35
     // Use the input to filter the teams
