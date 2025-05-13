@@ -5,6 +5,208 @@ using Microsoft.EntityFrameworkCore;
 //first i need an instance of the context
 using var context = new FootballLeagueDbContext();
 
+//for sqlite users to see where the db file gets created:
+//Console.WriteLine($"Database file location: {context.DbPath}");
+
+//inserting data
+/* INSERT INTO Coaches (cols) VALUES (values) */
+
+//simple insert //cip...49
+//await InsertOneRecordAsync();
+async Task InsertOneRecordAsync() //cip...49
+{
+    var newCoach = new Coach
+    {
+        Name = "Jose Mourinho",
+        CreatedDate = DateTime.Now
+    };
+    await context.Coaches.AddAsync(newCoach);
+    await context.SaveChangesAsync();
+    //NOTE: always parameterise the queries so that ef can provise that extra layer of protection.
+}
+
+//loop insert //cip...49
+//await InsertWithLoopAsync();
+async Task InsertWithLoopAsync() //cip...49
+{
+    var newCoach = new Coach
+    {
+        Name = "Jose Mourinho",
+        CreatedDate = DateTime.Now
+    };
+
+    var newCoach1 = new Coach
+    {
+        Name = "Theodore Whitmore",
+        CreatedDate = DateTime.Now
+    };
+
+    List<Coach> coaches = new ()
+    {
+        newCoach,
+        newCoach1
+    };
+
+    foreach (var coach in coaches)
+    {
+        await context.Coaches.AddAsync(coach);
+    }
+    //NOTE: it's personal preference whether i commit once or each time.
+    Console.WriteLine("before save: " + context.ChangeTracker.DebugView.LongView);
+    foreach (var coach in coaches)
+        Console.WriteLine($"Coach ID: {coach.Id}, Coach: {coach.Name}, Created Date: {coach.CreatedDate}");
+
+    await context.SaveChangesAsync();
+    //the Id is returned to the object after the save.
+    Console.WriteLine("after save: " + context.ChangeTracker.DebugView.LongView);
+
+    foreach (var coach in coaches)
+        Console.WriteLine($"Coach ID: {coach.Id}, Coach: {coach.Name}, Created Date: {coach.CreatedDate}");
+}
+
+//batch insert
+//await InsertRangeAsync();
+async Task InsertRangeAsync() //cip...49
+{
+    var newCoach = new Coach
+    {
+        Name = "Jose Mourinho",
+        CreatedDate = DateTime.Now
+    };
+
+    var newCoach1 = new Coach
+    {
+        Name = "Theodore Whitmore",
+        CreatedDate = DateTime.Now
+    };
+
+    List<Coach> coaches = new ()
+    {
+        newCoach,
+        newCoach1
+    };
+
+    await context.Coaches.AddRangeAsync(coaches); //<---
+
+    //NOTE: it's personal preference whether i commit once or each time.
+    Console.WriteLine("before save: " + context.ChangeTracker.DebugView.LongView);
+    foreach (var coach in coaches)
+        Console.WriteLine($"Coach ID: {coach.Id}, Coach: {coach.Name}, Created Date: {coach.CreatedDate}");
+
+    await context.SaveChangesAsync();
+    //the Id is returned to the object after the save.
+    Console.WriteLine("after save: " + context.ChangeTracker.DebugView.LongView);
+
+    foreach (var coach in coaches)
+        Console.WriteLine($"Coach ID: {coach.Id}, Coach: {coach.Name}, Created Date: {coach.CreatedDate}");
+}
+
+//update operations //cip...50
+//await UpdateAsync();
+async Task UpdateAsync() //cip...50
+{
+    var coach = await context.Coaches.FindAsync(9); //NOTE: if the object's being tracked by the context, it will be returned. if not, it will be retrieved from the database.
+    if (coach == null)
+    {
+        Console.WriteLine("Coach not found.");
+        return;
+    }
+    //because i haven't tuenrned tracking off, coach is being tracked.
+    coach.Name = $"harry potter ({DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond})";
+    //it will only update the name because that was the only change.
+    Console.WriteLine("before save 1: " + context.ChangeTracker.DebugView.LongView);
+    await context.SaveChangesAsync();
+
+    coach.Name = $"harry potter ({DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond})";
+    coach.CreatedDate = DateTime.Now;
+    //it will only update the name and createddate because both have changed.
+    Console.WriteLine("before save 2: " + context.ChangeTracker.DebugView.LongView);
+    await context.SaveChangesAsync();
+
+    coach = await context.Coaches
+        .AsNoTracking()
+        //.FindAsync(8); //NOTE: fails to compile as FindAsync needs tracking to search the context first(??).
+        .FirstOrDefaultAsync(q => q.Id == 8); //cip...50. NOTE: this is the same as FirstAsync() but returns null if no record is found.
+    if (coach == null)
+    {
+        Console.WriteLine("Coach not found.");
+        return;
+    }
+    coach.Name = $"harry potter-no tracking ({DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond})";
+    //no tracking so nothing's changed.
+    Console.WriteLine("before save 3: " + context.ChangeTracker.DebugView.LongView);
+    await context.SaveChangesAsync();
+    context.Update(coach); //cip...50. NOTE: it's not sure what changed so all the field(name)s, apart from the ID field, will be upadted.
+    //or
+    //context.UpdateRange(coaches);
+    //it's also the equivalent as:
+    //context.Entry(coach).State = EntityState.Modified;
+    Console.WriteLine("before save 4: " + context.ChangeTracker.DebugView.LongView);
+    await context.SaveChangesAsync();
+    Console.WriteLine("after all updates: " + context.ChangeTracker.DebugView.LongView);
+}
+
+//update operations //cip...51
+/* DELETE FROM Coaches WHERE Id = 4 */
+//await DeleteAsync();
+async Task DeleteAsync() //cip...51
+{
+    var coach = await context.Coaches.FindAsync(4); //NOTE: if the object's being tracked by the context, it will be returned. if not, it will be retrieved from the database.
+    if (coach == null)
+    {
+        Console.WriteLine("Coach not found.");
+        return;
+    }
+    //delete
+    context.Remove(coach);
+    //or
+    //context.RemoveRange(coaches);
+    //or
+    //context.Entry(coach).State = EntityState.Deleted;
+    await context.SaveChangesAsync();
+}   
+
+//update operations //cip...52
+//await ExecuteDeleteAsync();
+async Task ExecuteDeleteAsync() //cip...52
+{
+    // var coaches = await context.Coaches.Where(q => q.Name == "Theodore Whitmore").ToListAsync(); //NOTE: if the object's being tracked by the context, it will be returned. if not, it will be retrieved from the database.
+    // if (coaches == null)
+    // {
+    //     Console.WriteLine("Coach not found.");
+    //     return;
+    // }
+    // context.RemoveRange(coaches);
+    // await context.SaveChangesAsync();
+    //or
+    await context.Coaches
+        .Where(q => q.Name == "Theodore Whitmore")
+        .ExecuteDeleteAsync(); //cip...52. NOTE: this is a new method in ef core 7.0. it will delete all records that meet the condition.
+    // vscode help:
+    //     (awaitable, extension) Task<int> IQueryable<Coach>.ExecuteDeleteAsync<Coach>([CancellationToken cancellationToken = default])
+    //     Asynchronously deletes database rows for the entity instances which match the LINQ query from the database.
+
+    //     This operation executes immediately against the database, rather than being deferred until DbContext.SaveChanges() is called. It also does not interact with the EF change tracker in any way: entity instances which happen to be tracked when this operation is invoked aren't taken into account, and aren't updated to reflect the changes.
+
+    //     See Executing bulk operations with EF Core for more information and examples.
+
+    //     Returns:
+    //     The total number of rows deleted in the database.
+}
+
+//await ExecuteUpdateAsync();
+async Task ExecuteUpdateAsync() //cip...52
+{
+    //NOTE: similar to ExecuteDeleteAsync
+    await context.Coaches.Where(q => q.Name == "Jose Mourinho")
+        .ExecuteUpdateAsync(set => set
+            .SetProperty(prop => prop.Name, "Josep \"Pep\" Guardiola Sala")
+            //.SetProperty(prop => prop.CreatedDate, DateTime.Now)
+        ); //cip...52. NOTE: this is a new method in ef core 7.0. it will delete all records that meet the condition.}
+}
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 //select all teams cip...31
 
 //GetAllTeams(); cip...33
@@ -36,7 +238,7 @@ using var context = new FootballLeagueDbContext();
 //await NoTrackingAsync();
 
 //iqueryables vs list types //cip...43
-await IQueryablesVsListTypesAsync();
+//await IQueryablesVsListTypesAsync();
 async Task IQueryablesVsListTypesAsync() //cip...43
 {
     Console.Write("Enter '1' for team with Id = 1 or '2' for teams that contain 'FC':");

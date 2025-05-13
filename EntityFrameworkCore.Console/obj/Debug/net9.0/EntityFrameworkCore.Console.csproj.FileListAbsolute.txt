@@ -168,10 +168,10 @@ C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Conso
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.AssemblyInfoInputs.cache
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.AssemblyInfo.cs
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.csproj.CoreCompileInputs.cache
+C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.sourcelink.json
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFr.A99A5022.Up2Date
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.dll
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\refint\EntityFrameworkCore.Console.dll
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.pdb
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.genruntimeconfig.cache
 C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\ref\EntityFrameworkCore.Console.dll
-C:\Users\kev\projects_vscode\EntityFrameworkCore_vsc_9\EntityFrameworkCore.Console\obj\Debug\net9.0\EntityFrameworkCore.Console.sourcelink.json
