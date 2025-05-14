@@ -1,6 +1,6 @@
 namespace EntityFrameworkCore.Domain;
 
-public class Team : BaseDomainModel
+public class Team : BaseDomainModel //cip...12
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }

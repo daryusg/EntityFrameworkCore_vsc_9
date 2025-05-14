@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 //first i need an instance of the context
 using var context = new FootballLeagueDbContext();
+context.Database.MigrateAsync(); //cip...63. NOTE: this will create the database if it doesn't exist and apply any pending migrations. it will not create the database if it already exists.
+
 
 //for sqlite users to see where the db file gets created:
 //Console.WriteLine($"Database file location: {context.DbPath}");

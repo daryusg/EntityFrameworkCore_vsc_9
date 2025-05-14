@@ -1,3 +1,5 @@
+using System.Reflection;
+using EntityFrameworkCore.Data.Configurations;
 using EntityFrameworkCore.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,7 +13,8 @@ public class FootballLeagueDbContext : DbContext
         //cip...29. set the path to the database file in the local application data folder.
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder); //12/05/25. from chatgpt: C:\Users\<YourUsername>\AppData\Local\
-        DbPath = Path.Combine(path, "FootballLeague_EFCore.db"); //<ctrl>. -> "Generate property DbPath"
+        //DbPath = Path.Combine(path, "FootballLeague_EFCore.db"); //"DBPath" -> <ctrl .> -> "Generate property DbPath"
+        DbPath = Path.Combine(path, "FootballLeague_EFCoreFor61.db"); //"DBPath" -> <ctrl .> -> "Generate property DbPath" //cip...61
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,14 +33,14 @@ public class FootballLeagueDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Team>().HasData(
-          new Team { Id = 1, Name = "Tivoli Gardens FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 0) }, //hard-coding due to migration errors. DateTimeOffset.UtcNow.DateTime
-          new Team { Id = 2, Name = "Waterhouse FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 1) },
-          new Team { Id = 3, Name = "Humble Lions FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 2) }
-        );
+        //modelBuilder.ApplyConfiguration(new TeamConfiguration()); //cip...59
+        //modelBuilder.ApplyConfiguration(new LeagueConfiguration()); //cip...59
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //cip...59. apply all configurations in the assembly.
     }
 
-    public DbSet<Team> Teams { get; set; }
-    public DbSet<Coach> Coaches { get; set; }
+    public DbSet<Team> Teams { get; set; } //cip...12
+    public DbSet<Coach> Coaches { get; set; } //cip...12
+    public DbSet<League> Leagues { get; set; } //cip...57
+    public DbSet<Match> Matches { get; set; } //cip...57
     public string DbPath { get; private set; }
 }

@@ -3,6 +3,7 @@ using System;
 using EntityFrameworkCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFrameworkCore.Data.Migrations
 {
     [DbContext(typeof(FootballLeagueDbContext))]
-    partial class FootballLeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250514122017_AddedMoreEntities")]
+    partial class AddedMoreEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -37,10 +40,8 @@ namespace EntityFrameworkCore.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("TeamId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -79,35 +80,6 @@ namespace EntityFrameworkCore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Leagues");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CoachId = 0,
-                            CreatedBy = "TestUser1",
-                            CreatedDate = new DateTime(2025, 5, 14, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeagueId = 0,
-                            Name = "Jamaica Premier League"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CoachId = 0,
-                            CreatedBy = "TestUser1",
-                            CreatedDate = new DateTime(2025, 5, 14, 18, 0, 1, 0, DateTimeKind.Unspecified),
-                            LeagueId = 0,
-                            Name = "English Premier League"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CoachId = 0,
-                            CreatedBy = "TestUser1",
-                            CreatedDate = new DateTime(2025, 5, 14, 18, 0, 2, 0, DateTimeKind.Unspecified),
-                            LeagueId = 0,
-                            Name = "La Liga"
-                        });
                 });
 
             modelBuilder.Entity("EntityFrameworkCore.Domain.Match", b =>
