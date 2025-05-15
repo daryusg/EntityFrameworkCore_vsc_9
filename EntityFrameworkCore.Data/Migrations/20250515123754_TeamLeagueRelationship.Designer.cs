@@ -3,6 +3,7 @@ using System;
 using EntityFrameworkCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFrameworkCore.Data.Migrations
 {
     [DbContext(typeof(FootballLeagueDbContext))]
-    partial class FootballLeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250515123754_TeamLeagueRelationship")]
+    partial class TeamLeagueRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -107,9 +110,6 @@ namespace EntityFrameworkCore.Data.Migrations
                     b.Property<int>("AwayTeamId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AwayTeamScore")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -123,9 +123,6 @@ namespace EntityFrameworkCore.Data.Migrations
                     b.Property<int>("HomeTeamId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("HomeTeamScore")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
@@ -136,10 +133,6 @@ namespace EntityFrameworkCore.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AwayTeamId");
-
-                    b.HasIndex("HomeTeamId");
 
                     b.ToTable("Matches");
                 });
@@ -176,9 +169,6 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.HasIndex("LeagueId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("Teams");
 
                     b.HasData(
@@ -211,46 +201,15 @@ namespace EntityFrameworkCore.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EntityFrameworkCore.Domain.Match", b =>
-                {
-                    b.HasOne("EntityFrameworkCore.Domain.Team", "AwayTeam")
-                        .WithMany("AwayMatches")
-                        .HasForeignKey("AwayTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EntityFrameworkCore.Domain.Team", "HomeTeam")
-                        .WithMany("HomeMatches")
-                        .HasForeignKey("HomeTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AwayTeam");
-
-                    b.Navigation("HomeTeam");
-                });
-
             modelBuilder.Entity("EntityFrameworkCore.Domain.Team", b =>
                 {
                     b.HasOne("EntityFrameworkCore.Domain.League", "League")
-                        .WithMany("Teams")
+                        .WithMany()
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("League");
-                });
-
-            modelBuilder.Entity("EntityFrameworkCore.Domain.League", b =>
-                {
-                    b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("EntityFrameworkCore.Domain.Team", b =>
-                {
-                    b.Navigation("AwayMatches");
-
-                    b.Navigation("HomeMatches");
                 });
 #pragma warning restore 612, 618
         }
