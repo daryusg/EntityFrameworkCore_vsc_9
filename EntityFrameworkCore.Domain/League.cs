@@ -1,5 +1,3 @@
-using System;
-
 namespace EntityFrameworkCore.Domain;
 
 public class League : BaseDomainModel //cip...57

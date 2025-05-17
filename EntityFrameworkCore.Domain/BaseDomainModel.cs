@@ -1,5 +1,3 @@
-using System;
-
 namespace EntityFrameworkCore.Domain;
 
 public abstract class BaseDomainModel

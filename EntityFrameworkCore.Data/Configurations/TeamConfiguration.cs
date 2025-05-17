@@ -28,9 +28,9 @@ internal class TeamConfiguration : IEntityTypeConfiguration<Team> //cip...59. in
         //---------------------------------------------------------------------------
 
         builder.HasData(
-          new Team { Id = 1, Name = "Tivoli Gardens FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 0), CreatedBy = "TestUser1" }, //hard-coding due to migration errors. DateTimeOffset.UtcNow.DateTime
-          new Team { Id = 2, Name = "Waterhouse FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 1), CreatedBy = "TestUser1" },
-          new Team { Id = 3, Name = "Humble Lions FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 2), CreatedBy = "TestUser1" }
+          new Team { Id = 1, Name = "Tivoli Gardens FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 0), CreatedBy = "TestUser1", LeagueId = 1, CoachId = 1 }, //hard-coding due to migration errors. DateTimeOffset.UtcNow.DateTime
+          new Team { Id = 2, Name = "Waterhouse FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 1), CreatedBy = "TestUser1", LeagueId = 1, CoachId = 2 },
+          new Team { Id = 3, Name = "Humble Lions FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 2), CreatedBy = "TestUser1", LeagueId = 1, CoachId = 3 }
         ); //cip...24. cip...58 added for new col , CreatedBy = "TestUser1"
     }
 }
