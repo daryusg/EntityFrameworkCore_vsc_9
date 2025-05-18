@@ -6,11 +6,228 @@ using Microsoft.EntityFrameworkCore;
 using var context = new FootballLeagueDbContext();
 context.Database.MigrateAsync(); //cip...63. NOTE: this will create the database if it doesn't exist and apply any pending migrations. it will not create the database if it already exists.
 
-
 //for sqlite users to see where the db file gets created:
 //Console.WriteLine($"Database file location: {context.DbPath}");
 
-//inserting data
+
+#region Related Data  //cip...76
+
+//insert record with fk
+//await InsertMatch();
+async Task InsertMatch() //cip...76
+{
+    var match1 = new Match
+    {
+        HomeTeamScore = 0,
+        AwayTeamScore = 0,
+        TicketPrice = 22.50m,
+        Date = new DateTime(2025, 5, 24, 13, 0, 0),
+        HomeTeamId = 2,
+        AwayTeamId = 1,
+        CreatedDate = DateTime.Now,
+        CreatedBy = "TestUser1"
+    };
+    //NOTE: the Id fields are fk's and must have a valid record in the database.
+    await context.AddAsync(match1); //cip...76
+    await context.SaveChangesAsync();
+
+    //ERROR. invalid fk:
+    var match2 = new Match
+    {
+        HomeTeamScore = 0,
+        AwayTeamScore = 0,
+        TicketPrice = 22.50m,
+        Date = new DateTime(2025, 5, 24, 13, 0, 0),
+        HomeTeamId = 0,
+        AwayTeamId = 10,
+        CreatedDate = DateTime.Now,
+        CreatedBy = "TestUser1"
+    };
+    //NOTE: the Id fields are fk's and must have a valid record in the database.
+    await context.AddAsync(match2); //cip...76
+    await context.SaveChangesAsync();
+}
+
+//insert parent/child
+//await InsertTeamWithCoachAsync();
+async Task InsertTeamWithCoachAsync() //cip...76
+{
+    var team = new Team
+    {
+        Name = "New Team",
+        Coach = new Coach
+        {
+            Name = "Johnson",
+            CreatedDate = DateTime.Now,
+            CreatedBy = "TestUser1"
+        },
+        CreatedDate = DateTime.Now,
+        CreatedBy = "TestUser1",
+        LeagueId = 1 //cip...76. NOTE: this is a nullable field and can be null(???).
+    };
+    await context.AddAsync(team);
+    await context.SaveChangesAsync();
+    //NOTE: it inserted the coach first and then the team. this is because the coach is a child of the team. Team needs a valid Coach and coachID.
+}
+
+//insert parent with children
+//await InsertLeagueWithTeamsAsync();
+async Task InsertLeagueWithTeamsAsync() //cip...76
+
+{
+    var league = new League
+    {
+        Name = "Serie A",
+        CreatedDate = DateTime.Now,
+        CreatedBy = "TestUser1",
+        Teams = new List<Team>
+        {
+            new Team
+            {
+                Name = "Juventus",
+                Coach = new Coach
+                {
+                    Name = "Juve Coach",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "TestUser1"
+                },
+                CreatedDate = DateTime.Now,
+                CreatedBy = "TestUser1"
+            },
+            new Team
+            {
+                Name = "AC Milan",
+                Coach = new Coach
+                {
+                    Name = "Milan Coach",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "TestUser1"
+                },
+                CreatedDate = DateTime.Now,
+                CreatedBy = "TestUser1"
+            },
+            new Team
+            {
+                Name = "AS Roma",
+                Coach = new Coach
+                {
+                    Name = "Roma Coach",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "TestUser1"
+                },
+                CreatedDate = DateTime.Now,
+                CreatedBy = "TestUser1"
+            }
+        }
+    };
+    await context.AddAsync(league);
+    await context.SaveChangesAsync();
+    //NOTE: this is an all or nothing save.
+}
+
+//eager data loading - load related data //cip...78
+//await EagerLoadingDataAsync();
+async Task EagerLoadingDataAsync() //cip...78
+{
+    var leagues = await context.Leagues
+        .Include(q => q.Teams)
+            //or
+            //.Include("Teams") <---"Teams" - the name of the navigation property.
+            .ThenInclude(q => q.Coach)
+        .ToListAsync(); //cip...78
+    /*
+        NOTE: the Include() and ThenInclude() statements genned joins:
+        SELECT "l"."Id", "l"."CreatedBy", "l"."CreatedDate", "l"."ModifiedBy", "l"."ModifiedDate", "l"."Name", "s"."Id", "s"."CoachId", "s"."CreatedBy", "s"."CreatedDate", "s"."LeagueId", "s"."ModifiedBy", "s"."ModifiedDate", "s"."Name", "s"."Id0", "s"."CreatedBy0", "s"."CreatedDate0", "s"."ModifiedBy0", "s"."ModifiedDate0", "s"."Name0"
+        FROM "Leagues" AS "l"
+        LEFT JOIN (
+            SELECT "t"."Id", "t"."CoachId", "t"."CreatedBy", "t"."CreatedDate", "t"."LeagueId", "t"."ModifiedBy", "t"."ModifiedDate", "t"."Name", "c"."Id" AS "Id0", "c"."CreatedBy" AS "CreatedBy0", "c"."CreatedDate" AS "CreatedDate0", "c"."ModifiedBy" AS "ModifiedBy0", "c"."ModifiedDate" AS "ModifiedDate0", "c"."Name" AS "Name0"
+            FROM "Teams" AS "t"
+            INNER JOIN "Coaches" AS "c" ON "t"."CoachId" = "c"."Id"
+        ) AS "s" ON "l"."Id" = "s"."LeagueId"
+        ORDER BY "l"."Id", "s"."Id"
+
+        NOTE: if i omit .ThenInclude(q => q.Coach) then i'll get a null exception error when i try to print {team.Coach.Name}:
+            Exception thrown: 'System.NullReferenceException' in EntityFrameworkCore.Console.dll
+            Exception thrown: 'System.NullReferenceException' in System.Private.CoreLib.dll
+    */
+    foreach (var league in leagues)
+    {
+        Console.WriteLine($"League: {league.Name}");
+        foreach (var team in league.Teams)
+        {
+            Console.WriteLine($"\tTeam: {team.Name}\tCoach: {team.Coach.Name}");
+        }
+    }
+}
+
+//explicit data loading - load related data
+//await ExplicitLoadingDataAsync();
+async Task ExplicitLoadingDataAsync() //cip...78
+{
+    var league = await context.FindAsync<League>(1);
+    //or
+    //var league = await context.Leagues.FindAsync(1);
+    if (league.Teams.Any())
+    {
+        Console.WriteLine($"League: {league.Name}");
+        foreach (var team in league.Teams)
+        {
+            Console.WriteLine($"\tTeam: {team.Name}");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"League: {league.Name} has no teams loaded.");
+    }
+    await context.Entry(league)
+        .Collection(q => q.Teams)
+        .LoadAsync(); //<--- league gets loaded with the Teams data.
+    if (league.Teams.Any())
+    {
+        Console.WriteLine($"League: {league.Name}");
+        foreach (var team in league.Teams)
+        {
+            Console.WriteLine($"\tTeam: {team.Name}");
+        }
+    }
+}
+
+//lazy loading - load related data //cip...80
+//await LazyLoadingData1Async();
+async Task LazyLoadingData1Async() //cip...80
+{
+    var league = await context.FindAsync<League>(1);
+    //or
+    //var league = await context.Leagues.FindAsync(1);
+    if (league.Teams.Any())
+    {
+        Console.WriteLine($"League: {league.Name}");
+        foreach (var team in league.Teams)
+        {
+            Console.WriteLine($"\tTeam: {team.Name}\tCoach: {team.Coach.Name}");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"League: {league.Name} has no teams loaded.");
+    }
+}
+
+await LazyLoadingData2Async();
+async Task LazyLoadingData2Async() //cip...80
+{
+    foreach (var league in context.Leagues)
+    {
+        Console.WriteLine($"League: {league.Name}");
+        foreach (var team in league.Teams)
+        {
+            Console.WriteLine($"\tTeam: {team.Name}\tCoach: {team.Coach.Name}");
+        }
+    }
+}
+#endregion
+
+#region inserting data //cip...49
 /* INSERT INTO Coaches (cols) VALUES (values) */
 
 //simple insert //cip...49
@@ -102,6 +319,7 @@ async Task InsertRangeAsync() //cip...49
     foreach (var coach in coaches)
         Console.WriteLine($"Coach ID: {coach.Id}, Coach: {coach.Name}, Created Date: {coach.CreatedDate}");
 }
+#endregion
 
 //update operations //cip...50
 //await UpdateAsync();

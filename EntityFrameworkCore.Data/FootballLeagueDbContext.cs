@@ -24,6 +24,7 @@ public class FootballLeagueDbContext : DbContext
         //optionsBuilder.UseSqlServer("Data Source=localhost,1448;Initial Catalog=FootballLeague_EFCore;Encrypt=False;user id=sa;password=Str0ngPa$$w0rd;"); //to be tested
         //optionsBuilder.UseSqlite($"Data Source=FootballLeague_EFCore.db");
         optionsBuilder.UseSqlite($"Data Source={DbPath}")
+            .UseLazyLoadingProxies() //cip...80
             //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking) //cip...42. set the default tracking behavior to NoTracking.
             .LogTo(Console.WriteLine, LogLevel.Information)
             .EnableSensitiveDataLogging()
