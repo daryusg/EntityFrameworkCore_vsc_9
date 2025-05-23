@@ -3,6 +3,7 @@ using System;
 using EntityFrameworkCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFrameworkCore.Data.Migrations
 {
     [DbContext(typeof(FootballLeagueDbContext))]
-    partial class FootballLeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250521181944_GetUpToDate")]
+    partial class GetUpToDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,34 +124,6 @@ namespace EntityFrameworkCore.Data.Migrations
                             CreatedDate = new DateTime(2025, 5, 14, 18, 0, 2, 0, DateTimeKind.Unspecified),
                             Name = "La Liga"
                         });
-                });
-
-            modelBuilder.Entity("EntityFrameworkCore.Domain.LeaguesAndTeamsView", b =>
-                {
-                    b.Property<int>("CoachId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CoachName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("LeagueId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LeagueName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TeamId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("TeamName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_LeaguesAndTeams", (string)null);
                 });
 
             modelBuilder.Entity("EntityFrameworkCore.Domain.Match", b =>

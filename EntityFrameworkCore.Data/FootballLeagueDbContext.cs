@@ -1,5 +1,4 @@
 using System.Reflection;
-using EntityFrameworkCore.Data.Configurations;
 using EntityFrameworkCore.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -37,11 +36,16 @@ public class FootballLeagueDbContext : DbContext
         //modelBuilder.ApplyConfiguration(new TeamConfiguration()); //cip...59
         //modelBuilder.ApplyConfiguration(new LeagueConfiguration()); //cip...59
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //cip...59. apply all configurations in the assembly.
+        modelBuilder.Entity<LeaguesAndTeamsView>().HasNoKey().ToView("vw_LeaguesAndTeams"); //cip...88. view for leagues and teams.
+        modelBuilder.HasDbFunction(typeof(FootballLeagueDbContext).GetMethod(nameof(GetEarliestTeamMatch), new[] { typeof(int) })).HasName("fn_GetEarliestMatch"); //cip...92.
     }
+
+    public DateTime GetEarliestTeamMatch(int teamId) => throw new NotImplementedException(); //cip...92
 
     public DbSet<Team> Teams { get; set; } //cip...12
     public DbSet<Coach> Coaches { get; set; } //cip...12
     public DbSet<League> Leagues { get; set; } //cip...57
     public DbSet<Match> Matches { get; set; } //cip...57
+    public DbSet<LeaguesAndTeamsView> LeaguesAndTeams_View { get; set; } //cip...88. view for leagues and teams.
     public string DbPath { get; private set; }
 }
