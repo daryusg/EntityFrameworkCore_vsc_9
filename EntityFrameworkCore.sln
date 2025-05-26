@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.Domain"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.Console", "EntityFrameworkCore.Console\EntityFrameworkCore.Console.csproj", "{5AD107FB-2B98-4505-80F1-E9BE814BCCA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.Api", "EntityFrameworkCore.Api\EntityFrameworkCore.Api.csproj", "{B1F47368-0890-4D2D-848A-90FAADB73B48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{5AD107FB-2B98-4505-80F1-E9BE814BCCA9}.Release|x64.Build.0 = Release|Any CPU
 		{5AD107FB-2B98-4505-80F1-E9BE814BCCA9}.Release|x86.ActiveCfg = Release|Any CPU
 		{5AD107FB-2B98-4505-80F1-E9BE814BCCA9}.Release|x86.Build.0 = Release|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Debug|x64.Build.0 = Debug|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Debug|x86.Build.0 = Debug|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Release|x64.ActiveCfg = Release|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Release|x64.Build.0 = Release|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1F47368-0890-4D2D-848A-90FAADB73B48}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

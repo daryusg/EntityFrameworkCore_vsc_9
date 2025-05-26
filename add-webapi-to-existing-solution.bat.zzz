@@ -1,0 +1,104 @@
+@echo off
+setlocal enabledelayedexpansion
+
+:: === CONFIGURATION ===
+set "PROJECT_NAME=EntityFrameworkCore.Api"
+set "FRAMEWORK=net9.0"
+
+:: === FIND EXISTING SOLUTION FILE ===
+for %%f in (*.sln) do (
+    set "SOLUTION_FILE=%%f"
+    goto found_solution
+)
+
+echo ❌ No .sln file found in the current directory.
+goto end
+
+:found_solution
+echo ✅ Found solution: %SOLUTION_FILE%
+
+:: === CREATE THE WEB API PROJECT ===
+dotnet new webapi -n %PROJECT_NAME% --framework %FRAMEWORK% --no-https false
+if errorlevel 1 goto end
+
+:: === ADD PROJECT TO SOLUTION ===
+dotnet sln "%SOLUTION_FILE%" add "%PROJECT_NAME%\%PROJECT_NAME%.csproj"
+if errorlevel 1 goto end
+
+:: === OVERWRITE Program.cs ===
+(
+echo var builder = WebApplication.CreateBuilder(args);
+
+echo builder.Services.AddControllers();
+echo builder.Services.AddEndpointsApiExplorer();
+echo builder.Services.AddSwaggerGen();
+
+echo var app = builder.Build();
+
+echo if (app.Environment.IsDevelopment())
+echo {
+echo     app.UseSwagger();
+echo     app.UseSwaggerUI();
+echo }
+
+echo app.UseHttpsRedirection();
+echo app.UseAuthorization();
+echo app.MapControllers();
+echo app.Run();
+) > "%PROJECT_NAME%\Program.cs"
+
+:: === CREATE Controllers FOLDER ===
+mkdir "%PROJECT_NAME%\Controllers"
+
+:: === CREATE WeatherForecastController.cs (brackets escaped) ===
+(
+echo using Microsoft.AspNetCore.Mvc;
+echo.
+echo namespace %PROJECT_NAME%.Controllers;
+echo.
+echo [ApiController]
+echo [Route^("[controller]"^)]
+echo public class WeatherForecastController : ControllerBase
+echo {
+echo     private static readonly string[] Summaries = new[]
+echo     {
+echo         "Freezing", "Bracing", "Chilly", "Cool", "Mild",
+echo         "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+echo     };
+echo.
+echo     private readonly ILogger^<WeatherForecastController^> _logger;
+echo.
+echo     public WeatherForecastController(ILogger^<WeatherForecastController^> logger)
+echo     {
+echo         _logger = logger;
+echo     }
+echo.
+echo     [HttpGet]
+echo     public IEnumerable^<WeatherForecast^> Get()
+echo     {
+echo         return Enumerable.Range(1, 5).Select(index =^> new WeatherForecast
+echo         {
+echo             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+echo             TemperatureC = Random.Shared.Next(-20, 55),
+echo             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+echo         }).ToArray();
+echo     }
+echo.
+echo     public class WeatherForecast
+echo     {
+echo         public DateOnly Date { get; set; }
+echo         public int TemperatureC { get; set; }
+echo         public string? Summary { get; set; }
+echo         public int TemperatureF =^> 32 + (int)(TemperatureC / 0.5556);
+echo     }
+echo }
+) > "%PROJECT_NAME%\Controllers\WeatherForecastController.cs"
+
+echo.
+echo ✅ Project "%PROJECT_NAME%" created and added to solution "%SOLUTION_FILE%".
+echo ▶ To run it:
+echo   cd %PROJECT_NAME%
+echo   dotnet run
+
+:end
+endlocal
