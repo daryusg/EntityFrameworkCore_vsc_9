@@ -5,8 +5,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register controller services to the container (enables [ApiController] support)
-builder.Services.AddControllers();
-
+//builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Configure JSON serialization options to ignore cyclic references
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; //cip...104
+}); //cip...104
 
 var sqliteDatabaseName = builder.Configuration.GetConnectionString("SqliteDatabaseConnectionString"); //cip...99
 //-----------------------------------------------------------
