@@ -8,23 +8,31 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team> //cip...59. inte
 {
     public void Configure(EntityTypeBuilder<Team> builder)
     {
+        //NOTE: all constraints that can be added at the database level can be added here (in the configuration). cip...110
         builder.HasIndex(q => q.Name).IsUnique(); //cip...72. Added to ensure that team names are unique in the database.
+
+        //builder.HasIndex(q => new { q.CoachId, q.LeagueId }).IsUnique(); //cip...110 composite key configuration.
+        builder.Property(q => q.Name)
+            .IsRequired()
+            .HasMaxLength(100); //cip...110. this overides eg the name's nullability and the default max length of 450 characters for string properties in EF Core.
+
+        builder.ToTable("Teams", t => t.IsTemporal()); //cip...109. "Teams" table is temporal, meaning it will keep track of historical data changes. This is useful for auditing and tracking changes over time.
 
         //---------------------------------------------------------------------------
         //cip...72. set up the many-to-many relationship
         //---------------------------------------------------------------------------
         builder.HasMany(m => m.HomeMatches)
-            .WithOne(q => q.HomeTeam)
-            .HasForeignKey(q => q.HomeTeamId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict); //cip...72. Added to ensure that if a team is deleted, the home matches are not deleted.
+        .WithOne(q => q.HomeTeam)
+        .HasForeignKey(q => q.HomeTeamId)
+        .IsRequired()
+        .OnDelete(DeleteBehavior.Restrict); //cip...72. Added to ensure that if a team is deleted, the home matches are not deleted.
 
         builder.HasMany(m => m.AwayMatches)
             .WithOne(q => q.AwayTeam)
             .HasForeignKey(q => q.AwayTeamId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict); //cip...72. Added to ensure that if a team is deleted, the home matches are not deleted.
-        //---------------------------------------------------------------------------
+                                                //---------------------------------------------------------------------------
 
         builder.HasData(
           new Team { Id = 1, Name = "Tivoli Gardens FC", CreatedDate = new DateTime(2025, 5, 9, 18, 0, 0), CreatedBy = "TestUser1", LeagueId = 1, CoachId = 1 }, //hard-coding due to migration errors. DateTimeOffset.UtcNow.DateTime

@@ -45,6 +45,28 @@ public class FootballLeagueDbContext : DbContext
         //<<<not for sqlite>>> modelBuilder.HasDbFunction(typeof(FootballLeagueDbContext).GetMethod(nameof(GetEarliestTeamMatch), new[] { typeof(int) })).HasName("fn_GetEarliestMatch"); //cip...92.
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) //cip...108. it returns the number of rows affected.
+    {
+        var entries = ChangeTracker.Entries<BaseDomainModel>()
+            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+        foreach (var entry in entries)
+        {
+            var now = DateTime.UtcNow; //cip...57. use UTC to avoid timezone issues.
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedDate = now;
+                entry.Entity.CreatedBy = "TestUser1";
+            }
+            else if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.ModifiedDate = now;
+                entry.Entity.ModifiedBy = "TestUser1";
+            }
+        }
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
     public DateTime GetEarliestTeamMatch(int teamId) => throw new NotImplementedException(); //cip...92
 
     public DbSet<Team> Teams { get; set; } //cip...12

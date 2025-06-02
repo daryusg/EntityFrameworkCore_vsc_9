@@ -5,11 +5,44 @@ using Microsoft.EntityFrameworkCore;
 try
 {
     //first i need an instance of the context
-    using var context = new FootballLeagueDbContext();
+    //-----------------------------------------------------------
+    // copied from EntityFrameworkCore.Api 
+    var folder = Environment.SpecialFolder.LocalApplicationData;
+    var path = Environment.GetFolderPath(folder);
+    var dbPath = Path.Combine(path, "FootballLeague_EFCoreFor61.db");
+    //-----------------------------------------------------------
+    var connectionString = $"Data Source={dbPath};"; //cip...99
+    //-----------------------------------------------------------
+    var optionsBuilder = new DbContextOptionsBuilder<FootballLeagueDbContext>();
+    optionsBuilder.UseSqlite(connectionString);
+    using var context = new FootballLeagueDbContext(optionsBuilder.Options);
+
     //context.Database.MigrateAsync(); //cip...63. NOTE: this will create the database if it doesn't exist and apply any pending migrations. it will not create the database if it already exists.
 
-    //for sqlite users to see where the db file gets created:
+    //for sqlite users to see where the db file got/gets created:
     //Console.WriteLine($"Database file location: {context.DbPath}");
+
+    //await TemporalTablesAsync();
+    async Task TemporalTablesAsync() //cip...109
+    {
+        var teamHistory = await context.Teams
+            //.TemporalAsOf(DateTime.Now.AddDays(-1)) //cip...109. get the state of the Teams table as of 1 day ago.
+            .TemporalAll()
+            .Where(q => q.Id == 1001) //cip...109. filter the results to only include team with Id == 1001.
+            .Select(t => new
+            {
+                Name = t.Name,
+                ValueFrom = EF.Property<DateTime>(t, "PeriodStart"),
+                ValueTo = EF.Property<DateTime>(t, "PeriodEnd"),
+            })
+            .ToListAsync();
+
+        foreach (var team in teamHistory)
+        {
+            Console.WriteLine($"Team Name: {team.Name}, From: {team.ValueFrom}, To: {team.ValueTo}");
+        }
+    }
+    //context.Database.MigrateAsync(); //cip...63. NOTE: this will create the database if it doesn't exist and apply any pending migrations. it will not create the database if it already exists.
 
     #region Raw SQL //cip...88
     //await QueryingKeylessEntityOrView(); //cip...88
@@ -102,7 +135,7 @@ try
     }
 
     //execute user-defined query
-    await ExecuteUserDefinedFunctionAsync();
+    //await ExecuteUserDefinedFunctionAsync();
     async Task ExecuteUserDefinedFunctionAsync()
     {
         int teamId = 0;
@@ -473,9 +506,21 @@ try
 
     #endregion
 
-    #region inserting data //cip...49
+    #region inserting data //cip...49, 108
     /* INSERT INTO Coaches (cols) VALUES (values) */
 
+    //simple insert //cip...108
+    //await InsertOneRecordWithAuditAsync();
+    async Task InsertOneRecordWithAuditAsync() //cip...108
+    {
+        var newLeague = new League
+        {
+            Name = "New League with audit",
+        };
+        await context.Leagues.AddAsync(newLeague);
+        await context.SaveChangesAsync();
+        //NOTE: always parameterise the queries so that ef can provise that extra layer of protection.
+    }
     //simple insert //cip...49
     //await InsertOneRecordAsync();
     async Task InsertOneRecordAsync() //cip...49

@@ -2,7 +2,17 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build",
+      "label": "build Console",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/EntityFrameworkCore.Console/EntityFrameworkCore.Console.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "build Api",
       "command": "dotnet",
       "type": "process",
       "args": [

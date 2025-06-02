@@ -2,10 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Console App",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build Console",
+      "program": "${workspaceFolder}/EntityFrameworkCore.Console/bin/Debug/net9.0/EntityFrameworkCore.Console.dll",
+      "cwd": "${workspaceFolder}/EntityFrameworkCore.Console",
+      "stopAtEntry": false
+    },
+    {
       "name": "Launch API with Swagger",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
+      "preLaunchTask": "build Api",
       "program": "${workspaceFolder}/EntityFrameworkCore.Api/bin/Debug/net9.0/EntityFrameworkCore.Api.dll",
       "args": [],
       "cwd": "${workspaceFolder}/EntityFrameworkCore.Api",
