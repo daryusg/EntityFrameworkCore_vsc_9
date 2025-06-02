@@ -1,5 +1,3 @@
-using System;
-
 namespace EntityFrameworkCore.Domain;
 
 public class LeaguesAndTeamsView //cip...88

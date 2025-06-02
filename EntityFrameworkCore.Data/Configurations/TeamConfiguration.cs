@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityFrameworkCore.Data.Configurations;
 
-internal class TeamConfiguration : IEntityTypeConfiguration<Team> //cip...59. internal as only needed in this project. EntityTypeConfiguration is a class in the Microsoft.EntityFrameworkCore namespace that provides a way to configure an entity type in Entity Framework Core.
+public class TeamConfiguration : IEntityTypeConfiguration<Team> //cip...59. internal as only needed in this project. EntityTypeConfiguration is a class in the Microsoft.EntityFrameworkCore namespace that provides a way to configure an entity type in Entity Framework Core.
 {
     public void Configure(EntityTypeBuilder<Team> builder)
     {

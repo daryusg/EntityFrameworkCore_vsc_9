@@ -15,8 +15,8 @@ var folder = Environment.SpecialFolder.LocalApplicationData;
 var path = Environment.GetFolderPath(folder);
 var dbPath = Path.Combine(path, sqliteDatabaseName);
 //-----------------------------------------------------------
-//var connectionString = $"Data Source={dbPath};"; //cip...99
-var connectionString = builder.Configuration.GetConnectionString("SqlServerDatabaseConnectionString"); //cip...99
+var connectionString = $"Data Source={dbPath};"; //cip...99
+//var connectionString = builder.Configuration.GetConnectionString("SqlServerDatabaseConnectionString"); //cip...99
 
 builder.Services.AddDbContext<FootballLeagueDbContext>(options =>
 {

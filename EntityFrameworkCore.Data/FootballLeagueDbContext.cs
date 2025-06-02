@@ -3,7 +3,6 @@ using EntityFrameworkCore.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace EntityFrameworkCore.Data;
 
@@ -43,7 +42,7 @@ public class FootballLeagueDbContext : DbContext
         //modelBuilder.ApplyConfiguration(new LeagueConfiguration()); //cip...59
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //cip...59. apply all configurations in the assembly.
         modelBuilder.Entity<LeaguesAndTeamsView>().HasNoKey().ToView("vw_LeaguesAndTeams"); //cip...88. view for leagues and teams.
-        modelBuilder.HasDbFunction(typeof(FootballLeagueDbContext).GetMethod(nameof(GetEarliestTeamMatch), new[] { typeof(int) })).HasName("fn_GetEarliestMatch"); //cip...92.
+        //<<<not for sqlite>>> modelBuilder.HasDbFunction(typeof(FootballLeagueDbContext).GetMethod(nameof(GetEarliestTeamMatch), new[] { typeof(int) })).HasName("fn_GetEarliestMatch"); //cip...92.
     }
 
     public DateTime GetEarliestTeamMatch(int teamId) => throw new NotImplementedException(); //cip...92
@@ -56,7 +55,7 @@ public class FootballLeagueDbContext : DbContext
     public string DbPath { get; private set; }
 }
 
-public class FootbalLeagueDbContextFactory : IDesignTimeDbContextFactory<FootballLeagueDbContext> //cip...100. This class is used to create a DbContext instance at design time, such as during migrations or scaffolding.
+public class FootballLeagueDbContextFactory : IDesignTimeDbContextFactory<FootballLeagueDbContext> //cip...100. This class is used to create a DbContext instance at design time, such as during migrations or scaffolding.
 {
     public FootballLeagueDbContext CreateDbContext(string[] args)
     {
