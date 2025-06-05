@@ -21,9 +21,74 @@ try
 
     //for sqlite users to see where the db file got/gets created:
     //Console.WriteLine($"Database file location: {context.DbPath}");
+    #region additional queries
 
-    //await TemporalTablesAsync();
-    async Task TemporalTablesAsync() //cip...109
+    await ConcurrencyChecksAsync(); //cip...113
+    async Task ConcurrencyChecksAsync() //cip...113
+    {
+        //NOTE: this is a concurrency check. it will throw an exception if the row has been modified by another user.
+        var team = await context.Teams.FindAsync(1);
+        team.Name = "New Team with concurrency check 2"; //Tivoli Gardens FC
+        //team.RowGuid = Guid.NewGuid(); cip...113 moved RowGuid to BaseDomainModel so this can be, and was, moved to FootballLeagueDbContext.SaveChangesAsync.
+        //NOTE to test this easily, breakpoint the try and manually update the RowGuid field (https://guidgenerator.com/) before continuing.
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    //await TransactionsAsync(); //cip...111
+    async Task TransactionsAsync() //cip...111
+    {
+        var transaction = context.Database.BeginTransaction(); //<---   transaction start
+        var league = new League
+        {
+            Name = "testing transactions"
+        };
+        await context.AddAsync(league);
+        await context.SaveChangesAsync();
+
+        transaction.CreateSavepoint("created league");
+
+        var coach = new Coach
+        {
+            Name = "new team 1 coach"
+        };
+        await context.AddAsync(coach);
+        await context.SaveChangesAsync();
+
+        transaction.CreateSavepoint("created coach");
+
+        var teams = new List<Team>
+        {
+            new Team
+            {
+                Name = "new team 1",
+                LeagueId = league.Id,
+                //CoachId = coach.Id
+            }
+        };
+        await context.AddRangeAsync(teams);
+        await context.SaveChangesAsync();
+
+        try
+        {
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            //transaction.RollbackToSavepoint("created league");
+            //throw;
+        }
+    }
+
+    //await TemporalTablesAsync(); //IMPORTANT: unsupported in sqlite.
+    async Task TemporalTablesAsync() //cip...109. IMPORTANT: unsupported in sqlite.
     {
         var teamHistory = await context.Teams
             //.TemporalAsOf(DateTime.Now.AddDays(-1)) //cip...109. get the state of the Teams table as of 1 day ago.
@@ -43,6 +108,8 @@ try
         }
     }
     //context.Database.MigrateAsync(); //cip...63. NOTE: this will create the database if it doesn't exist and apply any pending migrations. it will not create the database if it already exists.
+
+    #endregion
 
     #region Raw SQL //cip...88
     //await QueryingKeylessEntityOrView(); //cip...88

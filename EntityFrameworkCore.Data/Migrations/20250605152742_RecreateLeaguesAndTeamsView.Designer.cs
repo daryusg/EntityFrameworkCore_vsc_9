@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFrameworkCore.Data.Migrations
 {
     [DbContext(typeof(FootballLeagueDbContext))]
-    [Migration("20250602225921_RecreateLeaguesAndTeamsView")]
+    [Migration("20250605152742_RecreateLeaguesAndTeamsView")]
     partial class RecreateLeaguesAndTeamsView
     {
         /// <inheritdoc />
@@ -28,12 +28,14 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -41,7 +43,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -80,12 +82,14 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -93,6 +97,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -130,6 +135,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CoachName")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("LeagueId")
@@ -137,6 +143,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("LeagueName")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TeamId")
@@ -144,6 +151,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("TeamName")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.ToTable((string)null);
@@ -165,6 +173,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
@@ -180,12 +189,14 @@ namespace EntityFrameworkCore.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("TicketPrice")
+                        .HasPrecision(18, 3)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -208,6 +219,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
@@ -217,6 +229,7 @@ namespace EntityFrameworkCore.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(101)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFrameworkCore.Data.Migrations
 {
     [DbContext(typeof(FootballLeagueDbContext))]
-    [Migration("20250602225812_AlterTeamsTable")]
-    partial class AlterTeamsTable
+    [Migration("20250605170030_AddedRowGuidToken")]
+    partial class AddedRowGuidToken
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,12 +28,14 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -41,7 +43,11 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RowGuid")
+                        .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -54,21 +60,24 @@ namespace EntityFrameworkCore.Data.Migrations
                             Id = 1,
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 17, 11, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jose Mourinho"
+                            Name = "Jose Mourinho",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 17, 11, 0, 1, 0, DateTimeKind.Unspecified),
-                            Name = "Josep \"Pep\" Guardiola Sala"
+                            Name = "Josep \"Pep\" Guardiola Sala",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 3,
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 17, 11, 0, 2, 0, DateTimeKind.Unspecified),
-                            Name = "Trevior Williams"
+                            Name = "Trevior Williams",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -80,12 +89,14 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -93,6 +104,11 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RowGuid")
+                        .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -105,21 +121,24 @@ namespace EntityFrameworkCore.Data.Migrations
                             Id = 1,
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 14, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jamaica Premier League"
+                            Name = "Jamaica Premier League",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 14, 18, 0, 1, 0, DateTimeKind.Unspecified),
-                            Name = "English Premier League"
+                            Name = "English Premier League",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 3,
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 14, 18, 0, 2, 0, DateTimeKind.Unspecified),
-                            Name = "La Liga"
+                            Name = "La Liga",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -130,6 +149,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CoachName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("LeagueId")
@@ -137,6 +157,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("LeagueName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TeamId")
@@ -144,6 +165,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("TeamName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.ToTable((string)null);
@@ -165,6 +187,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
@@ -180,12 +203,18 @@ namespace EntityFrameworkCore.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("RowGuid")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("TicketPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -208,6 +237,7 @@ namespace EntityFrameworkCore.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
@@ -217,6 +247,7 @@ namespace EntityFrameworkCore.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -225,6 +256,10 @@ namespace EntityFrameworkCore.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RowGuid")
+                        .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -249,7 +284,8 @@ namespace EntityFrameworkCore.Data.Migrations
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 9, 18, 0, 0, 0, DateTimeKind.Unspecified),
                             LeagueId = 1,
-                            Name = "Tivoli Gardens FC"
+                            Name = "Tivoli Gardens FC",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
@@ -258,7 +294,8 @@ namespace EntityFrameworkCore.Data.Migrations
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 9, 18, 0, 1, 0, DateTimeKind.Unspecified),
                             LeagueId = 1,
-                            Name = "Waterhouse FC"
+                            Name = "Waterhouse FC",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
@@ -267,7 +304,8 @@ namespace EntityFrameworkCore.Data.Migrations
                             CreatedBy = "TestUser1",
                             CreatedDate = new DateTime(2025, 5, 9, 18, 0, 2, 0, DateTimeKind.Unspecified),
                             LeagueId = 1,
-                            Name = "Humble Lions FC"
+                            Name = "Humble Lions FC",
+                            RowGuid = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 

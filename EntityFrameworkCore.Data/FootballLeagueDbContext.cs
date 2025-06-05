@@ -42,7 +42,35 @@ public class FootballLeagueDbContext : DbContext
         //modelBuilder.ApplyConfiguration(new LeagueConfiguration()); //cip...59
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //cip...59. apply all configurations in the assembly.
         modelBuilder.Entity<LeaguesAndTeamsView>().HasNoKey().ToView("vw_LeaguesAndTeams"); //cip...88. view for leagues and teams.
-        //<<<not for sqlite>>> modelBuilder.HasDbFunction(typeof(FootballLeagueDbContext).GetMethod(nameof(GetEarliestTeamMatch), new[] { typeof(int) })).HasName("fn_GetEarliestMatch"); //cip...92.
+
+        //05/06/25 chatgpt (see 202506-05_CourseNotes_20250605_vsc_ChatGPT.txt)
+        // var coachEntity = modelBuilder.Model.FindEntityType(typeof(Coach));
+        // foreach (var prop in coachEntity.GetProperties())
+        // {
+        //     Console.WriteLine($"Coach Entity Property: {prop.Name} ({prop.ClrType.Name})");
+        // }
+
+        // var teamEntity = modelBuilder.Model.FindEntityType(typeof(Team));
+        // foreach (var prop in teamEntity.GetProperties())
+        // {
+        //     Console.WriteLine($"Team Entity Property: {prop.Name} ({prop.ClrType.Name})");
+        // }
+
+        // var matchEntity = modelBuilder.Model.FindEntityType(typeof(Match));
+        // foreach (var prop in matchEntity.GetProperties())
+        // {
+        //     Console.WriteLine($"Match Entity Property: {prop.Name} ({prop.ClrType.Name})");
+        // }
+
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) //cip...111
+    {
+        //base.ConfigureConventions(configurationBuilder);
+        //configure all strings
+        configurationBuilder.Properties<string>().HaveMaxLength(100); //cip...111. set the maximum length for all string properties to 100 characters.
+        //configure all decimals
+        configurationBuilder.Properties<decimal>().HavePrecision(18, 2); //cip...111. set the precision for all decimal properties to 18 digits with 2 decimal places.
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) //cip...108. it returns the number of rows affected.
@@ -63,6 +91,8 @@ public class FootballLeagueDbContext : DbContext
                 entry.Entity.ModifiedDate = now;
                 entry.Entity.ModifiedBy = "TestUser1";
             }
+
+            entry.Entity.RowGuid = Guid.NewGuid(); //cip...113. set RowGuid for concurrency control.
         }
         return base.SaveChangesAsync(cancellationToken);
     }
