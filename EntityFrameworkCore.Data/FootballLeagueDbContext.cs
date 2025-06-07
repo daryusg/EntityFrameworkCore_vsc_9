@@ -43,7 +43,7 @@ public class FootballLeagueDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //cip...59. apply all configurations in the assembly.
         modelBuilder.Entity<LeaguesAndTeamsView>().HasNoKey().ToView("vw_LeaguesAndTeams"); //cip...88. view for leagues and teams.
 
-        //05/06/25 chatgpt (see 202506-05_CourseNotes_20250605_vsc_ChatGPT.txt)
+         //05/06/25 chatgpt (see 202506-05_CourseNotes_20250605_vsc_ChatGPT.txt)
         // var coachEntity = modelBuilder.Model.FindEntityType(typeof(Coach));
         // foreach (var prop in coachEntity.GetProperties())
         // {

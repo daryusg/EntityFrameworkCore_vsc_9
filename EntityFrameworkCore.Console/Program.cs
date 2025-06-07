@@ -23,7 +23,48 @@ try
     //Console.WriteLine($"Database file location: {context.DbPath}");
     #region additional queries
 
-    await ConcurrencyChecksAsync(); //cip...113
+    //global query filters //cip...114
+    await GlobalQueryFiltersAsync();
+    async Task GlobalQueryFiltersAsync() //cip...114
+    {
+        //-----------------------------------------------
+        //reset the test
+        //NOTE: the following won't work because of the global (IsDeleted) predicate. IsDeleted will alwats be false.
+        //MUST be done manually OR .IgnoreQueryFilters()
+        League? league;
+        league = await context.Leagues
+            .IgnoreQueryFilters()
+            //.FindAsync(1); can't be used with .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(l => l.Id == 1);
+        //league.IsDeleted = false;
+        //await context.SaveChangesAsync();
+        //-----------------------------------------------
+        var leagues = await context.Leagues
+            .IgnoreQueryFilters() //<---bypass the global query filter; the global (IsDeleted) predicate.
+            .ToListAsync();
+        int rn = 1;
+        foreach (var l in leagues)
+        {
+            Console.WriteLine($"(before) League ({rn++}): {l.Name}, IsDeleted: {l.IsDeleted}");
+        }
+        league = await context.Leagues.FindAsync(1);
+        league.IsDeleted = true; //cip...114. NOTE: this will not delete the league, but mark it as deleted.
+                                 //context.Update(league);
+        await context.SaveChangesAsync();
+
+        /*
+            var leagues = context.Leagues.Where(q => !q.IsDeleted).ToList(); //cip...114. NOTE: this will not return the leagues not marked as deleted.
+            now global in LeagueConfiguration.Configure method: builder.HasQueryFilter(l => !l.IsDeleted);
+        */
+        leagues = await context.Leagues.ToListAsync();
+        rn = 1;
+        foreach (var l in leagues)
+        {
+            Console.WriteLine($"(after) League ({rn++}): {l.Name}, IsDeleted: {l.IsDeleted}");
+        }
+    }
+
+    //await ConcurrencyChecksAsync(); //cip...113
     async Task ConcurrencyChecksAsync() //cip...113
     {
         //NOTE: this is a concurrency check. it will throw an exception if the row has been modified by another user.
