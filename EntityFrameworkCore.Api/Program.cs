@@ -26,7 +26,14 @@ builder.Services.AddDbContext<FootballLeagueDbContext>(options =>
 {
     //options allows replacement of the FootballLeagueDbContext.OnConfiguring method //cip...99
     //options.UseSqlServer(sqlServerDatabaseConnectionString) //cip...99
-    options.UseSqlite(connectionString) //cip...99
+    options.UseSqlite(connectionString, sqliteOptions =>
+    {
+        //sqliteOptions.MigrationsAssembly("EntityFrameworkCore.Data"); //auto-code
+        //sqliteOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); //auto-code
+        //sqliteOptions.MigrationsHistoryTable("__EFMigrationsHistory", "dbo"); //tw mention
+        sqliteOptions.CommandTimeout(30); //cip...115. Set command timeout to 30 seconds
+        //NOTE: sqlite doesn't have enable retry on failure like SQL Server, so we don't need to configure that here.
+    }) //cip...99
         //.UseLazyLoadingProxies()
         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
         .LogTo(Console.WriteLine, LogLevel.Information);
